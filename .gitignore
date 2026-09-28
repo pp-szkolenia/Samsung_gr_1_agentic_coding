@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# Dokumenty użytkownika (generowane przez aplikację w runtime)
+documents/
+
+# Build output (generowany przez build.py)
+cheatsheet.html
+
+# Export output (generowany przez aplikację)
+*.pptx
+*.pdf
+
+# Artefakty testów
+test-screenshots/
+
+# Narzędzia lokalne
+.claude/settings.local.json
+.playwright-mcp/
+
+# System / IDE
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
