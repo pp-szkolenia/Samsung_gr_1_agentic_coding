@@ -1,0 +1,73 @@
+{
+  "type": "cheatsheet",
+  "title": "Claude Code — Cheatsheet",
+  "subtitle": "Najważniejsze komendy, flagi i skróty klawiszowe",
+  "categories": [
+    {
+      "id": "session",
+      "name": "Sesja i kontekst",
+      "icon": "💬",
+      "commands": [
+        { "cmd": "/clear",   "desc": "Czyści historię rozmowy i zaczyna od zera. Warto użyć przy zmianie tematu.", "example": "/clear", "tip": "Tańsze i czystsze niż ciągnięcie długiej rozmowy." },
+        { "cmd": "/compact", "desc": "Streszcza dotychczasową rozmowę, żeby zwolnić miejsce w oknie kontekstu.", "example": "/compact skup się na zmianach w API" },
+        { "cmd": "/resume",  "desc": "Wyświetla listę poprzednich sesji i pozwala wrócić do jednej z nich.", "example": "/resume" },
+        { "cmd": "/rewind",  "desc": "Cofa rozmowę i/lub zmiany w kodzie do wcześniejszego punktu.", "example": "/rewind", "tip": "Skrót: dwa razy Esc." },
+        { "cmd": "/export",  "desc": "Eksportuje bieżącą rozmowę do pliku albo do schowka.", "example": "/export rozmowa.md" }
+      ]
+    },
+    {
+      "id": "model",
+      "name": "Model i koszty",
+      "icon": "🧠",
+      "commands": [
+        { "cmd": "/model",   "desc": "Wybór lub zmiana modelu (np. Opus, Sonnet, Haiku) w trakcie sesji.", "example": "/model sonnet", "tip": "Do prostych zadań lżejszy model jest szybszy i tańszy." },
+        { "cmd": "/fast",    "desc": "Włącza lub wyłącza tryb szybki (szybsze generowanie odpowiedzi).", "example": "/fast" },
+        { "cmd": "/usage",   "desc": "Pokazuje wykorzystanie limitów planu (sesyjnego i tygodniowego).", "example": "/usage" },
+        { "cmd": "/cost",    "desc": "Pokazuje koszt i zużycie tokenów w bieżącej sesji.", "example": "/cost" }
+      ]
+    },
+    {
+      "id": "project",
+      "name": "Projekt i pamięć",
+      "icon": "📁",
+      "commands": [
+        { "cmd": "/init",    "desc": "Analizuje repozytorium i tworzy plik CLAUDE.md z opisem projektu.", "example": "/init", "tip": "Warto zrobić to na początku pracy z nowym projektem." },
+        { "cmd": "/memory",  "desc": "Otwiera pliki pamięci (CLAUDE.md) do edycji.", "example": "/memory" },
+        { "cmd": "/add-dir", "desc": "Dodaje kolejny katalog roboczy, do którego Claude ma dostęp.", "example": "/add-dir ../shared-lib" },
+        { "cmd": "@plik",    "desc": "Dołącza wskazany plik lub katalog do wiadomości jako kontekst.", "example": "Wyjaśnij @src/app.ts" }
+      ]
+    },
+    {
+      "id": "config",
+      "name": "Konfiguracja",
+      "icon": "⚙️",
+      "commands": [
+        { "cmd": "/config",       "desc": "Otwiera panel ustawień (motyw, model domyślny, powiadomienia itd.).", "example": "/config" },
+        { "cmd": "/permissions",  "desc": "Zarządzanie regułami uprawnień.", "example": "/permissions" },
+        { "cmd": "/hooks",        "desc": "Konfiguracja hooków — poleceń uruchamianych automatycznie przy zdarzeniach.", "example": "/hooks" }
+      ]
+    },
+    {
+      "id": "code",
+      "name": "Praca z kodem",
+      "icon": "🔍",
+      "commands": [
+        { "cmd": "/review",          "desc": "Prosi o code review zmian lub pull requesta.", "example": "/review" },
+        { "cmd": "/security-review", "desc": "Przegląd bezpieczeństwa zmian na bieżącej gałęzi.", "example": "/security-review" },
+        { "cmd": "!polecenie",       "desc": "Tryb bash: uruchamia polecenie powłoki bezpośrednio.", "example": "! npm test" }
+      ]
+    },
+    {
+      "id": "keys",
+      "name": "Skróty klawiszowe",
+      "icon": "🎹",
+      "commands": [
+        { "cmd": "Esc",        "desc": "Przerywa Claude w trakcie pracy, bez utraty kontekstu.", "example": "Esc" },
+        { "cmd": "Esc Esc",    "desc": "Cofa się do wcześniejszej wiadomości (to samo co /rewind).", "example": "Esc Esc" },
+        { "cmd": "Shift+Tab",  "desc": "Przełącza tryby uprawnień: domyślny → auto-akceptacja → planowanie.", "example": "Shift+Tab" },
+        { "cmd": "Ctrl+C",     "desc": "Anuluje bieżące wejście; wciśnięte dwa razy zamyka Claude Code.", "example": "Ctrl+C" },
+        { "cmd": "↑ / ↓",      "desc": "Przewija historię wcześniej wpisanych poleceń.", "example": "↑" }
+      ]
+    }
+  ]
+}

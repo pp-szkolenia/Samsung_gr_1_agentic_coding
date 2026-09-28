@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prezentacja</title>
+<style>
+  :root {
+    --bg: #1a1a2e; --surface: #16213e; --text: #eaeaea;
+    --accent: #e94560; --code-bg: #0f3460; --muted: #8888a8;
+  }
+  [data-theme="light"] {
+    --bg: #f0f2f5; --surface: #ffffff; --text: #1a1a2e;
+    --accent: #e94560; --code-bg: #e8edf2; --muted: #6b6b7b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font: 16px/1.5 system-ui, -apple-system, sans-serif;
+    height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+  }
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 20px; background: var(--surface);
+    border-bottom: 1px solid rgba(128,128,128,0.2); flex-shrink: 0;
+  }
+  .nav-left { font-size: 13px; color: var(--muted); max-width: 50%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .nav-right { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+  .btn {
+    background: none; border: 1px solid rgba(128,128,128,0.3);
+    color: var(--text); padding: 5px 14px; border-radius: 6px;
+    cursor: pointer; font-size: 13px; transition: border-color .15s;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .counter { font-size: 13px; color: var(--muted); min-width: 55px; text-align: center; }
+  .progress { height: 3px; background: rgba(128,128,128,0.2); flex-shrink: 0; }
+  .progress-fill { height: 100%; background: var(--accent); transition: width .3s ease; }
+  .slide-area {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 32px; overflow: hidden;
+  }
+  .slide {
+    background: var(--surface); border-radius: 16px;
+    width: 100%; max-width: 900px; aspect-ratio: 16/9;
+    padding: 60px 80px; display: flex; flex-direction: column;
+    justify-content: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    position: relative; overflow: hidden;
+  }
+  .slide::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 4px; background: var(--accent);
+  }
+  .slide-number {
+    position: absolute; bottom: 20px; right: 24px;
+    font-size: 12px; color: var(--muted); font-weight: 500;
+  }
+  /* Title slide */
+  .s-title { font-size: clamp(28px,5vw,54px); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+  .s-title em { color: var(--accent); font-style: normal; }
+  .s-subtitle { font-size: clamp(14px,2vw,22px); color: var(--muted); margin-top: 16px; }
+  .s-author { margin-top: 32px; font-size: 13px; color: var(--muted); padding-top: 16px; border-top: 1px solid rgba(128,128,128,0.2); }
+  /* Content slide */
+  .s-heading { font-size: clamp(20px,3.5vw,34px); font-weight: 700; color: var(--accent); margin-bottom: 20px; }
+  .s-text { font-size: clamp(13px,1.8vw,18px); line-height: 1.7; color: var(--text); margin-bottom: 16px; }
+  .s-bullets { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .s-bullets li { display: flex; gap: 10px; align-items: flex-start; font-size: clamp(13px,1.8vw,17px); line-height: 1.5; }
+  .s-bullets li::before { content: '▸'; color: var(--accent); flex-shrink: 0; margin-top: 2px; font-size: 10px; }
+  /* Code slide */
+  pre {
+    background: var(--code-bg); border-radius: 8px; padding: 18px 22px;
+    overflow-x: auto; font-family: ui-monospace,'JetBrains Mono',Menlo,monospace;
+    font-size: clamp(11px,1.4vw,14px); line-height: 1.6;
+    border: 1px solid rgba(128,128,128,0.15);
+  }
+  /* Two-column */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .col-content {
+    font-size: clamp(12px,1.5vw,15px); line-height: 1.8;
+    white-space: pre-line;
+  }
+  @media (max-width: 600px) {
+    .slide { padding: 28px 24px; }
+    .two-col { grid-template-columns: 1fr; gap: 16px; }
+  }
+  @media print {
+    body { background: #fff; height: auto; overflow: visible; }
+    .nav, .progress { display: none !important; }
+    .slide-area { display: block; padding: 0; overflow: visible; }
+    .slide {
+      background: #fff; color: #000; box-shadow: none;
+      border-radius: 0; width: 100%; max-width: 100%;
+      aspect-ratio: unset; min-height: 80vh;
+      page-break-after: always; break-after: page;
+      padding: 40px 60px;
+    }
+    .slide-number { display: none; }
+    .s-title em { color: #c00; }
+    .s-heading { color: #c00; }
+    pre { border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+<div class="nav">
+  <div class="nav-left" id="nav-title">Prezentacja</div>
+  <div class="nav-right">
+    <button class="btn" id="btn-prev">← Wstecz</button>
+    <span class="counter" id="counter">1 / 1</span>
+    <button class="btn" id="btn-next">Dalej →</button>
+    <button class="btn" onclick="toggleTheme()" title="Zmień motyw">◐</button>
+  </div>
+</div>
+<div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
+<div class="slide-area">
+  <div class="slide" id="slide">
+    <p style="color:var(--muted);text-align:center">Ładowanie…</p>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const docId = params.get('id');
+let data = null;
+let current = 0;
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function toggleTheme() {
+  const root = document.documentElement;
+  root.dataset.theme = root.dataset.theme === 'light' ? '' : 'light';
+}
+
+function renderSlide(idx) {
+  if (!data || !data.slides || !data.slides.length) return;
+  const slide = data.slides[idx];
+  const total = data.slides.length;
+  const el = document.getElementById('slide');
+
+  let inner = '';
+  switch (slide.type) {
+    case 'title': {
+      const parts = esc(data.title || '').split(' — ');
+      const titleHtml = parts.length > 1
+        ? `<em>${parts[0]}</em> — ${parts.slice(1).join(' — ')}`
+        : parts[0];
+      inner = `
+        <div class="s-title">${titleHtml}</div>
+        ${slide.subtitle ? `<div class="s-subtitle">${esc(slide.subtitle)}</div>` : ''}
+        ${data.author ? `<div class="s-author">👤 ${esc(data.author)}</div>` : ''}
+      `;
+      break;
+    }
+    case 'content': {
+      const bullets = (slide.bullets || []).map(b => `<li>${esc(b)}</li>`).join('');
+      inner = `
+        <div class="s-heading">${esc(slide.title || '')}</div>
+        ${slide.content ? `<p class="s-text">${esc(slide.content)}</p>` : ''}
+        ${bullets ? `<ul class="s-bullets">${bullets}</ul>` : ''}
+      `;
+      break;
+    }
+    case 'code': {
+      inner = `
+        <div class="s-heading">${esc(slide.title || '')}</div>
+        ${slide.content ? `<p class="s-text">${esc(slide.content)}</p>` : ''}
+        <pre><code>${esc(slide.code || '')}</code></pre>
+      `;
+      break;
+    }
+    case 'two-column': {
+      inner = `
+        <div class="s-heading">${esc(slide.title || '')}</div>
+        <div class="two-col">
+          <div class="col-content">${esc(slide.left || '')}</div>
+          <div class="col-content">${esc(slide.right || '')}</div>
+        </div>
+      `;
+      break;
+    }
+    default: {
+      inner = `
+        <div class="s-heading">${esc(slide.title || 'Slajd')}</div>
+        ${slide.content ? `<p class="s-text">${esc(slide.content)}</p>` : ''}
+      `;
+    }
+  }
+
+  el.innerHTML = inner + `<span class="slide-number">${idx + 1} / ${total}</span>`;
+  document.getElementById('counter').textContent = `${idx + 1} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${((idx + 1) / total) * 100}%`;
+}
+
+function go(delta) {
+  if (!data || !data.slides) return;
+  current = Math.max(0, Math.min(data.slides.length - 1, current + delta));
+  renderSlide(current);
+}
+
+document.getElementById('btn-prev').addEventListener('click', () => go(-1));
+document.getElementById('btn-next').addEventListener('click', () => go(1));
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); go(1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp') { e.preventDefault(); go(-1); }
+});
+
+async function load() {
+  if (!docId) {
+    document.getElementById('slide').innerHTML = '<p style="color:var(--muted);text-align:center">Brak parametru ?id= w adresie URL</p>';
+    return;
+  }
+  try {
+    const r = await fetch(`/api/documents/${docId}`);
+    if (!r.ok) throw new Error(r.statusText);
+    data = await r.json();
+    document.title = data.title || 'Prezentacja';
+    document.getElementById('nav-title').textContent = data.title || 'Prezentacja';
+    if (data.theme === 'light') document.documentElement.dataset.theme = 'light';
+    if (!data.slides || !data.slides.length) {
+      document.getElementById('slide').innerHTML = '<p style="color:var(--muted);text-align:center">Prezentacja nie ma slajdów</p>';
+      return;
+    }
+    if (params.get('pdf') === '1') {
+      renderAllForPrint();
+    } else {
+      renderSlide(0);
+    }
+  } catch (e) {
+    document.getElementById('slide').innerHTML = `<p style="color:var(--muted);text-align:center">Błąd ładowania: ${esc(e.message)}</p>`;
+  }
+}
+
+function renderSlideHtml(slide, idx, total) {
+  let inner = '';
+  switch (slide.type) {
+    case 'title': {
+      const parts = esc(data.title || '').split(' — ');
+      const titleHtml = parts.length > 1
+        ? `<em>${parts[0]}</em> — ${parts.slice(1).join(' — ')}`
+        : parts[0];
+      inner = `
+        <div class="s-title">${titleHtml}</div>
+        ${slide.subtitle ? `<div class="s-subtitle">${esc(slide.subtitle)}</div>` : ''}
+        ${data.author ? `<div class="s-author">👤 ${esc(data.author)}</div>` : ''}
+      `;
+      break;
+    }
+    case 'content': {
+      const bullets = (slide.bullets || []).map(b => `<li>${esc(b)}</li>`).join('');
+      inner = `
+        <div class="s-heading">${esc(slide.title || '')}</div>
+        ${slide.content ? `<p class="s-text">${esc(slide.content)}</p>` : ''}
+        ${bullets ? `<ul class="s-bullets">${bullets}</ul>` : ''}
+      `;
+      break;
+    }
+    case 'code': {
+      inner = `
+        <div class="s-heading">${esc(slide.title || '')}</div>
+        ${slide.content ? `<p class="s-text">${esc(slide.content)}</p>` : ''}
+        <pre><code>${esc(slide.code || '')}</code></pre>
+      `;
+      break;
+    }
+    case 'two-column': {
+      inner = `
+        <div class="s-heading">${esc(slide.title || '')}</div>
+        <div class="two-col">
+          <div class="col-content">${esc(slide.left || '')}</div>
+          <div class="col-content">${esc(slide.right || '')}</div>
+        </div>
+      `;
+      break;
+    }
+    default: {
+      inner = `
+        <div class="s-heading">${esc(slide.title || 'Slajd')}</div>
+        ${slide.content ? `<p class="s-text">${esc(slide.content)}</p>` : ''}
+      `;
+    }
+  }
+  return inner;
+}
+
+function renderAllForPrint() {
+  const slides = data.slides || [];
+  const area = document.querySelector('.slide-area');
+  area.innerHTML = slides.map((slide, idx) =>
+    `<div class="slide">${renderSlideHtml(slide, idx, slides.length)}</div>`
+  ).join('');
+  document.querySelector('.nav').style.display = 'none';
+  document.querySelector('.progress').style.display = 'none';
+  window.print();
+}
+
+load();
+</script>
+</body>
+</html>

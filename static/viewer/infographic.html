@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infografika</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f5f2; --surface: #ffffff; --text: #1f1e1c; --muted: #6b675f;
+    --border: #e4e0d8; --accent: #3776ab; --accent-soft: #dce9f5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1a18; --surface: #252421; --text: #ece9e3; --muted: #a39e94;
+      --border: #3a3834; --accent: #4fa3e0; --accent-soft: #1a2d3f;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font: 15px/1.5 system-ui,-apple-system,sans-serif; padding: 32px 16px 64px; }
+  .wrap { max-width: 960px; margin: 0 auto; }
+
+  header {
+    text-align: center; padding: 40px 24px; background: var(--surface);
+    border-radius: 16px; border: 1px solid var(--border); margin-bottom: 24px;
+    position: relative; overflow: hidden;
+  }
+  header::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 6px; background: var(--accent);
+  }
+  h1 { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; color: var(--accent); }
+  .subtitle { color: var(--muted); margin-top: 8px; font-size: 16px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 16px; margin-bottom: 24px; }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px; text-align: center;
+  }
+  .stat-icon { font-size: 36px; margin-bottom: 8px; }
+  .stat-value { font-size: 38px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+  .stat-label { color: var(--muted); font-size: 13px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+  .card-title { font-size: 17px; font-weight: 700; margin-bottom: 16px; color: var(--accent); }
+  .chart-wrap { position: relative; max-height: 320px; }
+
+  .sections-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 16px; }
+  .section-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .section-card h3 { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 12px; }
+  .section-card ul { list-style: none; }
+  .section-card li { padding: 7px 0; border-top: 1px solid var(--border); font-size: 14px; display: flex; align-items: flex-start; gap: 8px; }
+  .section-card li:first-child { border-top: none; padding-top: 0; }
+  .section-card li::before { content: '→'; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+  .error { text-align: center; padding: 60px 20px; color: var(--muted); }
+  @media print {
+    body { background: #fff; padding: 16px; }
+    .wrap { max-width: 100%; }
+    header { background: #fff; border-color: #ccc; }
+    .stat-card, .card, .section-card { background: #fff; border-color: #ccc; }
+    canvas { max-width: 100% !important; }
+    .chart-wrap { max-height: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="root"><p class="error">Ładowanie…</p></div>
+</div>
+<script>
+const params = new URLSearchParams(location.search);
+const docId = params.get('id');
+const pdfMode = params.get('pdf') === '1';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function render(data) {
+  if (data.accent) document.documentElement.style.setProperty('--accent', data.accent);
+
+  const statsHtml = (data.stats || []).map(s => `
+    <div class="stat-card">
+      <div class="stat-icon">${esc(s.icon)}</div>
+      <div class="stat-value">${esc(s.value)}</div>
+      <div class="stat-label">${esc(s.label)}</div>
+    </div>`).join('');
+
+  const sectionsHtml = (data.sections || []).map(sec => `
+    <div class="section-card">
+      <h3>${esc(sec.title)}</h3>
+      <ul>${(sec.items || []).map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+    </div>`).join('');
+
+  document.getElementById('root').innerHTML = `
+    <header>
+      <h1>${esc(data.title)}</h1>
+      ${data.subtitle ? `<p class="subtitle">${esc(data.subtitle)}</p>` : ''}
+    </header>
+    ${statsHtml ? `<div class="stats-grid">${statsHtml}</div>` : ''}
+    ${data.chart ? `
+      <div class="card">
+        <div class="card-title">${esc(data.chart.title || 'Wykres')}</div>
+        <div class="chart-wrap"><canvas id="the-chart"></canvas></div>
+      </div>` : ''}
+    ${sectionsHtml ? `<div class="sections-grid">${sectionsHtml}</div>` : ''}
+  `;
+
+  if (data.chart) renderChart(data.chart);
+  else if (pdfMode) window.print();
+}
+
+function renderChart(chart) {
+  const canvas = document.getElementById('the-chart');
+  if (!canvas || !chart.data) return;
+  const labels = chart.data.map(d => d.label);
+  const values = chart.data.map(d => d.value);
+  const colors = chart.data.map((d, i) => d.color || `hsl(${210 + i * 50},65%,55%)`);
+  const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const textColor = dark ? '#ece9e3' : '#1f1e1c';
+  const gridColor = dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+  const isRound = chart.type === 'pie' || chart.type === 'donut';
+  new Chart(canvas, {
+    type: isRound ? (chart.type === 'donut' ? 'doughnut' : 'pie') : 'bar',
+    data: {
+      labels,
+      datasets: [{ data: values, backgroundColor: colors, borderWidth: 0, borderRadius: isRound ? 0 : 6 }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: { legend: { display: isRound, labels: { color: textColor } } },
+      scales: isRound ? {} : {
+        x: { ticks: { color: textColor }, grid: { color: gridColor } },
+        y: { ticks: { color: textColor }, grid: { color: gridColor }, beginAtZero: true }
+      },
+      animation: {
+        onComplete: () => { if (pdfMode) window.print(); }
+      }
+    }
+  });
+}
+
+async function load() {
+  if (!docId) { document.getElementById('root').innerHTML = '<p class="error">Brak parametru ?id= w URL</p>'; return; }
+  try {
+    const r = await fetch(`/api/documents/${docId}`);
+    if (!r.ok) throw new Error(r.statusText);
+    const data = await r.json();
+    document.title = data.title || 'Infografika';
+    render(data);
+  } catch (e) {
+    document.getElementById('root').innerHTML = `<p class="error">Błąd: ${esc(e.message)}</p>`;
+  }
+}
+load();
+</script>
+</body>
+</html>

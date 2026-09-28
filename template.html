@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<style>
+  /* Palety kolorów: wybierane z listy #theme (atrybut data-theme na <html>).
+     Brak atrybutu = "auto" (jasna lub ciemna wg ustawień systemu). */
+  :root, :root[data-theme="light"] {
+    --bg: #f7f5f2; --surface: #ffffff; --text: #1f1e1c; --muted: #6b675f;
+    --border: #e4e0d8; --accent: #c96442; --accent-soft: #f6e6de; --on-accent: #ffffff;
+    --code-bg: #f1eee8; --tip-bg: #fff8e6; --tip-border: #efd9a0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+      --bg: #1b1a18; --surface: #252421; --text: #ece9e3; --muted: #a39e94;
+      --border: #3a3834; --accent: #e08a68; --accent-soft: #3a2a23; --on-accent: #1b1a18;
+      --code-bg: #302e2a; --tip-bg: #33301f; --tip-border: #5c5230;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1a18; --surface: #252421; --text: #ece9e3; --muted: #a39e94;
+      --border: #3a3834; --accent: #e08a68; --accent-soft: #3a2a23; --on-accent: #1b1a18;
+      --code-bg: #302e2a; --tip-bg: #33301f; --tip-border: #5c5230;
+  }
+  :root[data-theme="sepia"] {
+    --bg: #f1e7d0; --surface: #fbf4e4; --text: #3b2f22; --muted: #7a6a55;
+    --border: #dccdaa; --accent: #8a5a2b; --accent-soft: #ecdcbc; --on-accent: #fbf4e4;
+    --code-bg: #efe3c8; --tip-bg: #f6ebc9; --tip-border: #d9c088;
+  }
+  :root[data-theme="nord"] {
+    --bg: #2e3440; --surface: #3b4252; --text: #eceff4; --muted: #a7b1c2;
+    --border: #4c566a; --accent: #88c0d0; --accent-soft: #3d5361; --on-accent: #2e3440;
+    --code-bg: #434c5e; --tip-bg: #45463f; --tip-border: #8f7f55;
+  }
+  :root[data-theme="forest"] {
+    --bg: #17201b; --surface: #1f2b24; --text: #e3ece5; --muted: #98aa9d;
+    --border: #33443a; --accent: #7fc98f; --accent-soft: #24402d; --on-accent: #17201b;
+    --code-bg: #26352c; --tip-bg: #33331f; --tip-border: #5e5a30;
+  }
+  :root[data-theme="ocean"] {
+    --bg: #eef4f8; --surface: #ffffff; --text: #14222e; --muted: #5a6b78;
+    --border: #d3e0ea; --accent: #1f6fa8; --accent-soft: #dcebf6; --on-accent: #ffffff;
+    --code-bg: #e7eff5; --tip-bg: #fff6e0; --tip-border: #ead39a;
+  }
+  :root[data-theme="contrast"] {
+    --bg: #000000; --surface: #0d0d0d; --text: #ffffff; --muted: #d0d0d0;
+    --border: #7a7a7a; --accent: #ffd400; --accent-soft: #2e2800; --on-accent: #000000;
+    --code-bg: #1a1a1a; --tip-bg: #1a1a1a; --tip-border: #ffd400;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  code, kbd, .mono { font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 32px 16px 64px; }
+  header { display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; margin-bottom: 24px; }
+  h1 { margin: 0; font-size: 28px; letter-spacing: -0.02em; }
+  h1 span { color: var(--accent); }
+  .sub { margin: 4px 0 0; color: var(--muted); }
+  .tools { display: flex; gap: 8px; flex-wrap: wrap; }
+  input[type=search] {
+    width: 260px; max-width: 100%; padding: 9px 12px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 14px;
+  }
+  input[type=search]:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  button {
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 14px;
+  }
+  select {
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    border-radius: 8px; padding: 8px 10px; cursor: pointer; font-size: 14px;
+  }
+  button:hover, select:hover { border-color: var(--accent); }
+  nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+  nav button { border-radius: 999px; padding: 5px 12px; font-size: 13px; }
+  nav button.active { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .grid { columns: 3 340px; column-gap: 16px; }
+  section {
+    break-inside: avoid; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px; margin: 0 0 16px;
+  }
+  section h2 { margin: 0 0 10px; font-size: 16px; display: flex; gap: 8px; align-items: center; }
+  section h2 .count { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--muted); }
+  .item { padding: 10px 0; border-top: 1px solid var(--border); }
+  .item:first-of-type { border-top: 0; padding-top: 0; }
+  .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+  .cmd {
+    font-weight: 600; color: var(--accent); background: var(--accent-soft);
+    padding: 2px 8px; border-radius: 6px; font-size: 14px;
+  }
+  .copy { padding: 2px 8px; font-size: 12px; color: var(--muted); }
+  .desc { margin: 6px 0 4px; font-size: 14px; }
+  .ex { display: block; font-size: 12.5px; background: var(--code-bg); border-radius: 6px; padding: 5px 8px; color: var(--muted); overflow-x: auto; white-space: pre; }
+  .ex::before { content: "$ "; opacity: .5; }
+  .tip { margin-top: 6px; font-size: 13px; background: var(--tip-bg); border: 1px solid var(--tip-border); border-radius: 6px; padding: 5px 8px; }
+  .empty { color: var(--muted); text-align: center; padding: 40px 0; }
+  mark { background: var(--tip-border); color: inherit; border-radius: 2px; }
+  footer { margin-top: 24px; color: var(--muted); font-size: 13px; text-align: center; }
+  @media print {
+    :root { --bg: #fff; --surface: #fff; }
+    .tools, nav, .copy { display: none !important; }
+    .wrap { padding: 0; }
+    .grid { columns: 3; }
+    section { border-color: #ccc; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1 id="title"></h1>
+      <p class="sub" id="subtitle"></p>
+    </div>
+    <div class="tools">
+      <input type="search" id="q" placeholder="Szukaj komendy… ( / )" aria-label="Szukaj">
+      <select id="theme" title="Paleta kolorów" aria-label="Paleta kolorów">
+        <option value="auto">◐ Auto (system)</option>
+        <option value="light">☀️ Jasny</option>
+        <option value="dark">🌙 Ciemny</option>
+        <option value="sepia">📜 Sepia</option>
+        <option value="nord">❄️ Nord</option>
+        <option value="forest">🌲 Las</option>
+        <option value="ocean">🌊 Ocean</option>
+        <option value="contrast">⬛ Wysoki kontrast</option>
+      </select>
+      <button onclick="window.print()" title="Drukuj / zapisz jako PDF">⎙ Drukuj</button>
+    </div>
+  </header>
+  <nav id="nav"></nav>
+  <main class="grid" id="grid"></main>
+  <p class="empty" id="empty" hidden>Brak wyników.</p>
+  <footer id="footer"></footer>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const hl = (text, q) => {
+  const safe = esc(text);
+  if (!q) return safe;
+  const re = new RegExp("(" + esc(q).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+  return safe.replace(re, "<mark>$1</mark>");
+};
+
+let activeCat = "all";
+
+function render() {
+  const q = $("#q").value.trim().toLowerCase();
+  let shown = 0;
+  const html = DATA.categories
+    .filter((c) => activeCat === "all" || c.id === activeCat)
+    .map((c) => {
+      const items = c.commands.filter((it) =>
+        !q || [it.cmd, it.desc, it.example, it.tip].filter(Boolean).join(" ").toLowerCase().includes(q));
+      if (!items.length) return "";
+      shown += items.length;
+      return `<section>
+        <h2><span>${esc(c.icon || "")}</span>${esc(c.name)}<span class="count">${items.length}</span></h2>
+        ${items.map((it) => `<div class="item">
+          <div class="row"><code class="cmd">${hl(it.cmd, q)}</code>
+            ${it.example ? `<button class="copy" data-copy="${esc(it.example)}">kopiuj</button>` : ""}</div>
+          <p class="desc">${hl(it.desc, q)}</p>
+          ${it.example ? `<code class="ex">${hl(it.example, q)}</code>` : ""}
+          ${it.tip ? `<div class="tip">💡 ${hl(it.tip, q)}</div>` : ""}
+        </div>`).join("")}
+      </section>`;
+    }).join("");
+  $("#grid").innerHTML = html;
+  $("#empty").hidden = shown > 0;
+}
+
+function init() {
+  document.title = DATA.title;
+  const [a, ...rest] = DATA.title.split(" — ");
+  $("#title").innerHTML = rest.length ? `<span>${esc(a)}</span> — ${esc(rest.join(" — "))}` : esc(a);
+  $("#subtitle").textContent = DATA.subtitle || "";
+  const total = DATA.categories.reduce((n, c) => n + c.commands.length, 0);
+  $("#footer").textContent = `${DATA.categories.length} kategorii · ${total} pozycji · wygenerowano z commands.json`;
+
+  const nav = $("#nav");
+  const cats = [{ id: "all", name: "Wszystkie", icon: "" }, ...DATA.categories];
+  nav.innerHTML = cats.map((c) =>
+    `<button data-cat="${esc(c.id)}" class="${c.id === "all" ? "active" : ""}">${esc(((c.icon || "") + " " + c.name).trim())}</button>`).join("");
+  nav.addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-cat]");
+    if (!b) return;
+    activeCat = b.dataset.cat;
+    nav.querySelectorAll("button").forEach((x) => x.classList.toggle("active", x === b));
+    render();
+  });
+
+  $("#q").addEventListener("input", render);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "/" && document.activeElement !== $("#q")) { e.preventDefault(); $("#q").focus(); }
+    if (e.key === "Escape") { $("#q").value = ""; render(); $("#q").blur(); }
+  });
+
+  $("#grid").addEventListener("click", async (e) => {
+    const b = e.target.closest(".copy");
+    if (!b) return;
+    try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = "✓ skopiowano"; }
+    catch { b.textContent = "błąd"; }
+    setTimeout(() => (b.textContent = "kopiuj"), 1200);
+  });
+
+  const root = document.documentElement;
+  const sel = $("#theme");
+  const applyTheme = (t) => {
+    if (!t || t === "auto" || !sel.querySelector(`option[value="${t}"]`)) t = "auto";
+    if (t === "auto") delete root.dataset.theme; else root.dataset.theme = t;
+    sel.value = t;
+  };
+  try { applyTheme(localStorage.getItem("cc-theme")); } catch { applyTheme("auto"); }
+  sel.addEventListener("change", () => {
+    applyTheme(sel.value);
+    try { localStorage.setItem("cc-theme", sel.value); } catch {}
+  });
+
+  render();
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+{
+  "title": "Claude Code — Cheatsheet",
+  "subtitle": "Najważniejsze komendy, flagi i skróty klawiszowe",
+  "categories": [
+    {
+      "id": "session",
+      "name": "Sesja i kontekst",
+      "icon": "💬",
+      "commands": [
+        { "cmd": "/clear", "desc": "Czyści historię rozmowy i zaczyna od zera. Warto użyć przy zmianie tematu.", "example": "/clear", "tip": "Tańsze i czystsze niż ciągnięcie długiej rozmowy." },
+        { "cmd": "/compact", "desc": "Streszcza dotychczasową rozmowę, żeby zwolnić miejsce w oknie kontekstu. Można podać, na czym ma się skupić streszczenie.", "example": "/compact skup się na zmianach w API" },
+        { "cmd": "/context", "desc": "Pokazuje, ile okna kontekstu zajmują: prompt systemowy, narzędzia, pliki pamięci i wiadomości.", "example": "/context" },
+        { "cmd": "/resume", "desc": "Wyświetla listę poprzednich sesji i pozwala wrócić do jednej z nich.", "example": "/resume" },
+        { "cmd": "/rewind", "desc": "Cofa rozmowę i/lub zmiany w kodzie do wcześniejszego punktu (checkpointu).", "example": "/rewind", "tip": "Skrót: dwa razy Esc." },
+        { "cmd": "/export", "desc": "Eksportuje bieżącą rozmowę do pliku albo do schowka.", "example": "/export rozmowa.md" },
+        { "cmd": "/exit", "desc": "Kończy pracę z Claude Code.", "example": "/exit" }
+      ]
+    },
+    {
+      "id": "model",
+      "name": "Model i koszty",
+      "icon": "🧠",
+      "commands": [
+        { "cmd": "/model", "desc": "Wybór lub zmiana modelu (np. Opus, Sonnet, Haiku) w trakcie sesji.", "example": "/model sonnet", "tip": "Do prostych zadań lżejszy model jest szybszy i tańszy." },
+        { "cmd": "/fast", "desc": "Włącza lub wyłącza tryb szybki (szybsze generowanie odpowiedzi).", "example": "/fast" },
+        { "cmd": "/usage", "desc": "Pokazuje wykorzystanie limitów planu (sesyjnego i tygodniowego).", "example": "/usage" },
+        { "cmd": "/cost", "desc": "Pokazuje koszt i zużycie tokenów w bieżącej sesji (przy rozliczaniu przez API).", "example": "/cost" },
+        { "cmd": "/status", "desc": "Informacje o wersji, modelu, koncie i połączeniach.", "example": "/status" }
+      ]
+    },
+    {
+      "id": "project",
+      "name": "Projekt i pamięć",
+      "icon": "📁",
+      "commands": [
+        { "cmd": "/init", "desc": "Analizuje repozytorium i tworzy plik CLAUDE.md z opisem projektu i konwencjami.", "example": "/init", "tip": "Warto zrobić to na początku pracy z nowym projektem." },
+        { "cmd": "/memory", "desc": "Otwiera pliki pamięci (CLAUDE.md) do edycji: projektowy, użytkownika itd.", "example": "/memory" },
+        { "cmd": "/add-dir", "desc": "Dodaje kolejny katalog roboczy, do którego Claude ma dostęp.", "example": "/add-dir ../shared-lib" },
+        { "cmd": "@plik", "desc": "Dołącza wskazany plik lub katalog do wiadomości jako kontekst.", "example": "Wyjaśnij @src/app.ts" }
+      ]
+    },
+    {
+      "id": "config",
+      "name": "Konfiguracja",
+      "icon": "⚙️",
+      "commands": [
+        { "cmd": "/config", "desc": "Otwiera panel ustawień (motyw, model domyślny, powiadomienia itd.).", "example": "/config" },
+        { "cmd": "/permissions", "desc": "Zarządzanie regułami uprawnień: co jest dozwolone, a co zabronione bez pytania.", "example": "/permissions" },
+        { "cmd": "/hooks", "desc": "Konfiguracja hooków, czyli poleceń uruchamianych automatycznie przy zdarzeniach.", "example": "/hooks" },
+        { "cmd": "/statusline", "desc": "Ustawia własny pasek statusu na dole terminala.", "example": "/statusline" },
+        { "cmd": "/terminal-setup", "desc": "Konfiguruje terminal, np. żeby Shift+Enter wstawiał nową linię.", "example": "/terminal-setup" },
+        { "cmd": "/vim", "desc": "Włącza lub wyłącza tryb edycji w stylu Vima w polu wprowadzania.", "example": "/vim" }
+      ]
+    },
+    {
+      "id": "extend",
+      "name": "Rozszerzenia",
+      "icon": "🧩",
+      "commands": [
+        { "cmd": "/mcp", "desc": "Zarządzanie serwerami MCP (zewnętrzne narzędzia i integracje).", "example": "/mcp" },
+        { "cmd": "/agents", "desc": "Tworzenie i zarządzanie subagentami, czyli wyspecjalizowanymi asystentami.", "example": "/agents" },
+        { "cmd": "/plugin", "desc": "Instalowanie i zarządzanie pluginami (komendy, agenty, hooki, skille).", "example": "/plugin" },
+        { "cmd": "/ide", "desc": "Łączy Claude Code z IDE (VS Code, JetBrains).", "example": "/ide" }
+      ]
+    },
+    {
+      "id": "code",
+      "name": "Praca z kodem",
+      "icon": "🔍",
+      "commands": [
+        { "cmd": "/review", "desc": "Prosi o code review zmian lub pull requesta.", "example": "/review" },
+        { "cmd": "/security-review", "desc": "Przegląd bezpieczeństwa zmian na bieżącej gałęzi.", "example": "/security-review" },
+        { "cmd": "!polecenie", "desc": "Tryb bash: uruchamia polecenie powłoki bezpośrednio, a jego wynik trafia do rozmowy.", "example": "! npm test" }
+      ]
+    },
+    {
+      "id": "help",
+      "name": "Pomoc i diagnostyka",
+      "icon": "🩺",
+      "commands": [
+        { "cmd": "/help", "desc": "Lista dostępnych komend.", "example": "/help" },
+        { "cmd": "/doctor", "desc": "Diagnozuje instalację i konfigurację Claude Code.", "example": "/doctor" },
+        { "cmd": "/login", "desc": "Logowanie na konto Anthropic lub zmiana konta.", "example": "/login" },
+        { "cmd": "/logout", "desc": "Wylogowanie z konta.", "example": "/logout" },
+        { "cmd": "/bug", "desc": "Zgłasza błąd lub przesyła opinię do Anthropic.", "example": "/bug" },
+        { "cmd": "/release-notes", "desc": "Pokazuje, co nowego w kolejnych wersjach.", "example": "/release-notes" }
+      ]
+    },
+    {
+      "id": "cli",
+      "name": "Wiersz poleceń (CLI)",
+      "icon": "⌨️",
+      "commands": [
+        { "cmd": "claude", "desc": "Uruchamia sesję interaktywną w bieżącym katalogu.", "example": "claude" },
+        { "cmd": "claude \"zadanie\"", "desc": "Uruchamia sesję od razu z pierwszym poleceniem.", "example": "claude \"wyjaśnij ten projekt\"" },
+        { "cmd": "claude -p", "desc": "Tryb nieinteraktywny (print): odpowiada i kończy działanie. Nadaje się do skryptów i potoków.", "example": "cat log.txt | claude -p \"znajdź błędy\"" },
+        { "cmd": "claude -c", "desc": "Kontynuuje ostatnią rozmowę z bieżącego katalogu.", "example": "claude -c" },
+        { "cmd": "claude -r", "desc": "Wznawia wybraną wcześniejszą sesję.", "example": "claude -r" },
+        { "cmd": "--model", "desc": "Wybiera model na starcie sesji.", "example": "claude --model opus" },
+        { "cmd": "--permission-mode", "desc": "Ustawia tryb uprawnień na starcie (np. plan, acceptEdits).", "example": "claude --permission-mode plan" },
+        { "cmd": "claude mcp add", "desc": "Dodaje serwer MCP z poziomu terminala.", "example": "claude mcp add nazwa -- npx serwer-mcp" },
+        { "cmd": "claude update", "desc": "Aktualizuje Claude Code do najnowszej wersji.", "example": "claude update" }
+      ]
+    },
+    {
+      "id": "keys",
+      "name": "Skróty klawiszowe",
+      "icon": "🎹",
+      "commands": [
+        { "cmd": "Esc", "desc": "Przerywa Claude w trakcie pracy, bez utraty kontekstu.", "example": "Esc" },
+        { "cmd": "Esc Esc", "desc": "Cofa się do wcześniejszej wiadomości (to samo co /rewind).", "example": "Esc Esc" },
+        { "cmd": "Shift+Tab", "desc": "Przełącza tryby uprawnień: domyślny → auto-akceptacja edycji → tryb planowania.", "example": "Shift+Tab" },
+        { "cmd": "Shift+Enter", "desc": "Nowa linia w wiadomości (alternatywnie \\ i Enter).", "example": "Shift+Enter" },
+        { "cmd": "Ctrl+C", "desc": "Anuluje bieżące wejście; wciśnięte dwa razy zamyka Claude Code.", "example": "Ctrl+C" },
+        { "cmd": "Ctrl+O", "desc": "Pokazuje lub ukrywa szczegółowy transkrypt (wywołania narzędzi).", "example": "Ctrl+O" },
+        { "cmd": "↑ / ↓", "desc": "Przewija historię wcześniej wpisanych poleceń.", "example": "↑" }
+      ]
+    }
+  ]
+}

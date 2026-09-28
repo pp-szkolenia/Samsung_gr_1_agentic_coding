@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slides Generator</title>
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3/dist/pptxgen.bundle.js"></script>
+<style>
+:root {
+  --bg:#f7f5f2; --surface:#fff; --text:#1f1e1c; --muted:#6b675f;
+  --border:#e4e0d8; --accent:#c96442; --r:10px;
+  --c-pres:#3b82f6; --c-info:#10b981; --c-cs:#c96442;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1b1a18;--surface:#252421;--text:#ece9e3;--muted:#a39e94;--border:#3a3834;
+}}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,sans-serif}
+
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:20}
+.logo{font-size:18px;font-weight:800;letter-spacing:-.03em}
+.logo span{color:var(--accent)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;
+  border:1px solid var(--border);background:var(--surface);color:var(--text);
+  cursor:pointer;font-size:14px;font-family:inherit;transition:all .15s}
+.btn:hover{border-color:var(--accent)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{opacity:.88}
+.btn-sm{padding:4px 10px;font-size:13px;border-radius:6px;border:1px dashed var(--border);
+  background:none;color:var(--muted);cursor:pointer;font-family:inherit}
+.btn-sm:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{color:#ef4444}
+.btn-danger:hover{border-color:#ef4444!important}
+.icon-btn{width:28px;height:28px;padding:0;border-radius:6px;border:1px solid var(--border);
+  background:none;color:var(--muted);cursor:pointer;font-size:12px;
+  display:inline-flex;align-items:center;justify-content:center}
+.icon-btn:hover{border-color:#ef4444;color:#ef4444}
+
+/* FILTER BAR */
+.filters{padding:14px 24px;display:flex;gap:8px;flex-wrap:wrap;
+  border-bottom:1px solid var(--border)}
+.flt-btn{padding:5px 14px;border-radius:999px;border:1px solid var(--border);
+  background:var(--surface);color:var(--muted);cursor:pointer;font-size:13px;font-family:inherit}
+.flt-btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+  gap:16px;padding:24px}
+.empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted)}
+.empty h3{font-size:22px;margin-bottom:8px}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:0;overflow:hidden;display:flex;flex-direction:column}
+.card-stripe{height:4px}
+.card[data-type="presentation"] .card-stripe{background:var(--c-pres)}
+.card[data-type="infographic"]  .card-stripe{background:var(--c-info)}
+.card[data-type="cheatsheet"]   .card-stripe{background:var(--c-cs)}
+.card-body{padding:16px;flex:1;display:flex;flex-direction:column;gap:6px}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card-title{font-weight:700;font-size:15px;flex:1}
+.badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.badge-presentation{background:#dbeafe;color:#1d4ed8}
+.badge-infographic {background:#d1fae5;color:#065f46}
+.badge-cheatsheet  {background:#fed7aa;color:#92400e}
+.card-meta{font-size:12px;color:var(--muted)}
+.card-actions{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:32px 16px;overflow-y:auto}
+.mbox{background:var(--surface);border-radius:14px;width:100%;max-width:720px;
+  box-shadow:0 24px 60px rgba(0,0,0,.3);display:flex;flex-direction:column}
+.mhdr{display:flex;align-items:center;justify-content:space-between;
+  padding:18px 24px;border-bottom:1px solid var(--border)}
+.mhdr h2{font-size:17px;font-weight:700}
+.mbody{padding:24px;overflow-y:auto;max-height:72vh;display:flex;flex-direction:column;gap:18px}
+.mftr{padding:14px 24px;border-top:1px solid var(--border);
+  display:flex;justify-content:flex-end;gap:8px}
+
+/* FORM */
+.fgrp{display:flex;flex-direction:column;gap:5px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-size:13px;font-weight:600;color:var(--muted)}
+.inp{padding:8px 10px;border:1px solid var(--border);border-radius:6px;
+  background:var(--bg);color:var(--text);font-size:14px;font-family:inherit;width:100%}
+.inp:focus{outline:2px solid var(--accent);outline-offset:-1px}
+textarea.inp{resize:vertical;min-height:72px}
+
+/* TYPE SELECTOR */
+.type-sel{display:flex;gap:8px}
+.type-btn{flex:1;padding:10px 6px;border-radius:8px;border:2px solid var(--border);
+  background:none;color:var(--text);cursor:pointer;font-size:13px;font-family:inherit;
+  text-align:center;transition:all .15s}
+.type-btn.on{border-color:var(--accent);background:var(--accent);color:#fff}
+
+/* SECTION */
+.sec{display:flex;flex-direction:column;gap:10px}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:8px;border-bottom:1px solid var(--border)}
+.sec-hdr h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+
+/* DYN ROWS */
+.dyn-list{display:flex;flex-direction:column;gap:8px}
+.slide-row,.cat-row{background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.slide-row-hdr{display:flex;gap:8px;align-items:center}
+.sl-num{font-size:12px;font-weight:700;color:var(--muted);min-width:52px}
+.sl-fields{display:flex;flex-direction:column;gap:6px}
+.dyn-row{display:flex;gap:6px;align-items:flex-start;
+  background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:8px}
+.dyn-row>.inp{flex:1}
+.cat-hdr{display:flex;gap:8px;align-items:center}
+.cat-hdr .inp:first-child{width:60px;flex-shrink:0}
+.cmds-list{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.cmd-row{display:grid;grid-template-columns:1fr 2fr 1fr 1fr auto;gap:6px;
+  align-items:center;background:var(--bg);border:1px solid var(--border);
+  border-radius:6px;padding:8px}
+
+/* CHART DATA HEADER */
+.ch-hdr{display:grid;grid-template-columns:2fr 1fr 44px 28px;gap:6px;
+  font-size:12px;color:var(--muted);padding:0 4px}
+.chart-row{display:grid;grid-template-columns:2fr 1fr 44px 28px;gap:6px;
+  align-items:center;background:var(--bg);border:1px solid var(--border);
+  border-radius:6px;padding:7px}
+
+@media(max-width:600px){
+  .grid{padding:12px}
+  .frow{grid-template-columns:1fr}
+  .cmd-row{grid-template-columns:1fr 1fr}
+  .type-sel{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="logo">Slides<span>Generator</span></div>
+  <button class="btn btn-primary" onclick="openModal()">+ Nowy dokument</button>
+</header>
+
+<div class="filters">
+  <button class="flt-btn on" data-f="all">Wszystkie</button>
+  <button class="flt-btn" data-f="presentation">📊 Prezentacje</button>
+  <button class="flt-btn" data-f="infographic">📈 Infografiki</button>
+  <button class="flt-btn" data-f="cheatsheet">📋 Cheatsheets</button>
+</div>
+
+<main class="grid" id="grid"></main>
+
+<!-- ============= MODAL ============= -->
+<div class="overlay" id="modal" hidden onclick="if(event.target===this)closeModal()">
+<div class="mbox" onclick="event.stopPropagation()">
+  <div class="mhdr">
+    <h2 id="m-title">Nowy dokument</h2>
+    <button class="icon-btn" onclick="closeModal()">✕</button>
+  </div>
+  <div class="mbody">
+
+    <!-- Type selector -->
+    <div class="fgrp" id="type-row">
+      <label>Typ dokumentu</label>
+      <div class="type-sel">
+        <button class="type-btn on" data-type="presentation" onclick="setType('presentation')">📊 Prezentacja</button>
+        <button class="type-btn"    data-type="infographic"  onclick="setType('infographic')">📈 Infografika</button>
+        <button class="type-btn"    data-type="cheatsheet"   onclick="setType('cheatsheet')">📋 Cheatsheet</button>
+      </div>
+    </div>
+
+    <!-- Common -->
+    <div class="fgrp">
+      <label for="f-title">Tytuł *</label>
+      <input id="f-title" class="inp" type="text" placeholder="Tytuł dokumentu">
+    </div>
+
+    <!-- ===== PRESENTATION ===== -->
+    <div id="form-pres">
+      <div class="frow">
+        <div class="fgrp">
+          <label for="f-author">Autor</label>
+          <input id="f-author" class="inp" type="text" placeholder="Imię i nazwisko">
+        </div>
+        <div class="fgrp">
+          <label for="f-theme">Motyw</label>
+          <select id="f-theme" class="inp">
+            <option value="dark">🌙 Ciemny</option>
+            <option value="light">☀️ Jasny</option>
+          </select>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-hdr">
+          <h3>Slajdy</h3>
+          <button class="btn-sm" onclick="addSlide()">+ Dodaj slajd</button>
+        </div>
+        <div class="dyn-list" id="slides-list"></div>
+      </div>
+    </div>
+
+    <!-- ===== INFOGRAPHIC ===== -->
+    <div id="form-info" hidden>
+      <div class="frow">
+        <div class="fgrp">
+          <label for="f-subtitle">Podtytuł</label>
+          <input id="f-subtitle" class="inp" type="text" placeholder="Podtytuł infografiki">
+        </div>
+        <div class="fgrp">
+          <label for="f-accent">Kolor akcentu</label>
+          <input id="f-accent" class="inp" type="color" value="#3776ab" style="height:38px;cursor:pointer">
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-hdr">
+          <h3>Statystyki</h3>
+          <button class="btn-sm" onclick="addStat()">+ Dodaj statystykę</button>
+        </div>
+        <div style="display:flex;gap:6px;font-size:12px;color:var(--muted);padding:0 4px">
+          <span style="flex:0 0 60px">Ikona</span>
+          <span style="flex:0 0 90px">Wartość</span>
+          <span style="flex:1">Opis</span>
+        </div>
+        <div class="dyn-list" id="stats-list"></div>
+      </div>
+      <div class="sec">
+        <div class="sec-hdr"><h3>Wykres</h3></div>
+        <div class="frow">
+          <div class="fgrp">
+            <label>Typ wykresu</label>
+            <select id="f-chart-type" class="inp">
+              <option value="bar">Słupkowy (bar)</option>
+              <option value="pie">Kołowy (pie)</option>
+              <option value="donut">Pierścieniowy (donut)</option>
+            </select>
+          </div>
+          <div class="fgrp">
+            <label>Tytuł wykresu</label>
+            <input id="f-chart-title" class="inp" type="text" placeholder="Tytuł wykresu">
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <span style="font-size:13px;font-weight:600;color:var(--muted)">Dane</span>
+          <button class="btn-sm" onclick="addChartRow()">+ Wiersz</button>
+        </div>
+        <div class="ch-hdr"><span>Etykieta</span><span>Wartość</span><span>Kolor</span><span></span></div>
+        <div class="dyn-list" id="chart-data-list"></div>
+      </div>
+      <div class="sec">
+        <div class="sec-hdr">
+          <h3>Sekcje tekstowe</h3>
+          <button class="btn-sm" onclick="addInfoSection()">+ Dodaj sekcję</button>
+        </div>
+        <div class="dyn-list" id="info-sections-list"></div>
+      </div>
+    </div>
+
+    <!-- ===== CHEATSHEET ===== -->
+    <div id="form-cs" hidden>
+      <div class="fgrp">
+        <label for="f-cs-subtitle">Podtytuł</label>
+        <input id="f-cs-subtitle" class="inp" type="text" placeholder="Podtytuł cheatsheeetu">
+      </div>
+      <div class="sec">
+        <div class="sec-hdr">
+          <h3>Kategorie</h3>
+          <button class="btn-sm" onclick="addCategory()">+ Dodaj kategorię</button>
+        </div>
+        <div class="dyn-list" id="cats-list"></div>
+      </div>
+    </div>
+
+  </div><!-- /mbody -->
+  <div class="mftr">
+    <button class="btn" onclick="closeModal()">Anuluj</button>
+    <button class="btn btn-primary" onclick="saveDoc()">💾 Zapisz</button>
+  </div>
+</div>
+</div>
+
+<script>
+// ===================== HELPERS =====================
+const esc  = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const eA   = s => esc(s);   // for attr values
+const eH   = s => esc(s);   // for html text
+const $    = id => document.getElementById(id);
+const q    = sel => document.querySelector(sel);
+const qAll = (sel,el) => (el||document).querySelectorAll(sel);
+
+// ===================== STATE =====================
+let state = { docs:[], filter:'all', editingId:null, type:'presentation' };
+
+// ===================== API =====================
+const api = {
+  list:   ()        => fetch('/api/documents').then(r=>r.json()),
+  get:    id        => fetch(`/api/documents/${id}`).then(r=>r.json()),
+  create: data      => fetch('/api/documents',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(r=>r.json()),
+  update: (id,data) => fetch(`/api/documents/${id}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(r=>r.json()),
+  del:    id        => fetch(`/api/documents/${id}`,{method:'DELETE'}).then(r=>r.json()),
+};
+
+// ===================== RENDER DOCS =====================
+async function loadDocs() {
+  state.docs = await api.list();
+  renderDocs();
+}
+
+function renderDocs() {
+  const el = $('grid');
+  const filtered = state.filter === 'all' ? state.docs : state.docs.filter(d => d.type === state.filter);
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty"><h3>Brak dokumentów</h3><p>Kliknij "+ Nowy dokument" aby zacząć.</p></div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(d => {
+    const type = d.type || 'unknown';
+    const badgeClass = `badge badge-${type}`;
+    const typeLabels = {presentation:'Prezentacja',infographic:'Infografika',cheatsheet:'Cheatsheet'};
+    const typeIcons  = {presentation:'📊',infographic:'📈',cheatsheet:'📋'};
+    const updated = d.updated ? new Date(d.updated).toLocaleDateString('pl-PL') : '—';
+    return `
+      <div class="card" data-type="${eA(type)}">
+        <div class="card-stripe"></div>
+        <div class="card-body">
+          <div class="card-top">
+            <div class="card-title">${eH(d.title)}</div>
+            <span class="${badgeClass}">${typeIcons[type]||''} ${eH(typeLabels[type]||type)}</span>
+          </div>
+          <div class="card-meta">Zaktualizowano: ${updated}</div>
+          <div class="card-actions">
+            <button class="btn" onclick="viewDoc('${eA(d.id)}','${eA(type)}')">👁 Podgląd</button>
+            <button class="btn" onclick="exportPdf('${eA(d.id)}','${eA(type)}')">📄 PDF</button>
+            ${type === 'presentation' ? `<button class="btn" onclick="exportPptx('${eA(d.id)}')">📎 PPTX</button>` : ''}
+            <button class="btn" onclick="editDoc('${eA(d.id)}')">✏️ Edytuj</button>
+            <button class="btn btn-danger" onclick="confirmDelete('${eA(d.id)}','${eA(d.title)}')">🗑</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function viewDoc(id, type) {
+  window.open(`/viewer/${type}.html?id=${id}`, '_blank');
+}
+
+function exportPdf(id, type) {
+  window.open(`/viewer/${type}.html?id=${id}&pdf=1`, '_blank');
+}
+
+async function confirmDelete(id, title) {
+  if (!confirm(`Usunąć "${title}"?`)) return;
+  await api.del(id);
+  await loadDocs();
+}
+
+// ===================== MODAL =====================
+function openModal() {
+  state.editingId = null;
+  $('m-title').textContent = 'Nowy dokument';
+  $('type-row').hidden = false;
+  clearForms();
+  setType('presentation');
+  $('modal').hidden = false;
+}
+
+async function editDoc(id) {
+  const data = await api.get(id);
+  state.editingId = id;
+  $('m-title').textContent = 'Edytuj dokument';
+  $('type-row').hidden = true;
+  clearForms();
+  setType(data.type || 'presentation', false);
+  populateForm(data);
+  $('modal').hidden = false;
+}
+
+function closeModal() {
+  $('modal').hidden = true;
+  state.editingId = null;
+}
+
+function clearForms() {
+  $('f-title').value = '';
+  $('f-author').value = '';
+  $('f-theme').value = 'dark';
+  $('f-subtitle').value = '';
+  $('f-accent').value = '#3776ab';
+  $('f-chart-type').value = 'bar';
+  $('f-chart-title').value = '';
+  $('f-cs-subtitle').value = '';
+  $('slides-list').innerHTML = '';
+  $('stats-list').innerHTML = '';
+  $('chart-data-list').innerHTML = '';
+  $('info-sections-list').innerHTML = '';
+  $('cats-list').innerHTML = '';
+}
+
+function setType(type, updateButtons = true) {
+  state.type = type;
+  if (updateButtons) {
+    qAll('.type-btn').forEach(b => b.classList.toggle('on', b.dataset.type === type));
+  }
+  $('form-pres').hidden = type !== 'presentation';
+  $('form-info').hidden = type !== 'infographic';
+  $('form-cs').hidden   = type !== 'cheatsheet';
+}
+
+// ===================== POPULATE FORM =====================
+function populateForm(data) {
+  $('f-title').value = data.title || '';
+  if (data.type === 'presentation') {
+    $('f-author').value = data.author || '';
+    $('f-theme').value  = data.theme  || 'dark';
+    $('slides-list').innerHTML = (data.slides || []).map(slideHTML).join('');
+    renumberSlides();
+  } else if (data.type === 'infographic') {
+    $('f-subtitle').value   = data.subtitle || '';
+    $('f-accent').value     = data.accent   || '#3776ab';
+    $('f-chart-type').value = (data.chart||{}).type  || 'bar';
+    $('f-chart-title').value= (data.chart||{}).title || '';
+    $('stats-list').innerHTML      = (data.stats||[]).map(statHTML).join('');
+    $('chart-data-list').innerHTML = ((data.chart||{}).data||[]).map(chartRowHTML).join('');
+    $('info-sections-list').innerHTML = (data.sections||[]).map(infoSectionHTML).join('');
+  } else if (data.type === 'cheatsheet') {
+    $('f-cs-subtitle').value = data.subtitle || '';
+    $('cats-list').innerHTML = (data.categories||[]).map(categoryHTML).join('');
+  }
+}
+
+// ===================== PRESENTATION FORM =====================
+function slideHTML(s = {}) {
+  const t = s.type || 'content';
+  return `<div class="slide-row">
+    <div class="slide-row-hdr">
+      <span class="sl-num">Slajd</span>
+      <select class="inp sl-type" style="width:auto" onchange="updateSlideType(this)">
+        <option value="title"      ${t==='title'      ?'selected':''}>Tytułowy</option>
+        <option value="content"    ${t==='content'    ?'selected':''}>Treść + punkty</option>
+        <option value="code"       ${t==='code'       ?'selected':''}>Kod</option>
+        <option value="two-column" ${t==='two-column' ?'selected':''}>Dwie kolumny</option>
+      </select>
+      <button type="button" class="icon-btn" onclick="this.closest('.slide-row').remove();renumberSlides()">✕</button>
+    </div>
+    <div class="sl-fields">
+      <input class="inp sl-title" type="text" placeholder="Tytuł slajdu" value="${eA(s.title||'')}">
+      <div class="sl-f-title" ${t!=='title'?'hidden':''}>
+        <input class="inp sl-subtitle" type="text" placeholder="Podtytuł" value="${eA(s.subtitle||'')}">
+      </div>
+      <div class="sl-f-content" ${t!=='content'?'hidden':''}>
+        <textarea class="inp sl-content" placeholder="Wstęp (opcjonalnie)" rows="2">${eH(s.content||'')}</textarea>
+        <textarea class="inp sl-bullets" placeholder="Punkty — każdy w nowej linii" rows="4">${eH((s.bullets||[]).join('\n'))}</textarea>
+      </div>
+      <div class="sl-f-code" ${t!=='code'?'hidden':''}>
+        <input class="inp sl-lang" type="text" placeholder="Język: python, js, sql…" value="${eA(s.language||'python')}">
+        <textarea class="inp sl-code" placeholder="Kod źródłowy" rows="5" style="font-family:monospace">${eH(s.code||'')}</textarea>
+      </div>
+      <div class="sl-f-twocol" ${t!=='two-column'?'hidden':''}>
+        <textarea class="inp sl-left"  placeholder="Lewa kolumna (każda linia = wiersz)" rows="4">${eH(s.left||'')}</textarea>
+        <textarea class="inp sl-right" placeholder="Prawa kolumna" rows="4">${eH(s.right||'')}</textarea>
+      </div>
+    </div>
+  </div>`;
+}
+
+function addSlide() {
+  $('slides-list').insertAdjacentHTML('beforeend', slideHTML());
+  renumberSlides();
+}
+
+function renumberSlides() {
+  qAll('#slides-list .sl-num').forEach((el,i) => el.textContent = `Slajd ${i+1}`);
+}
+
+function updateSlideType(sel) {
+  const row = sel.closest('.slide-row');
+  const t = sel.value;
+  row.querySelector('.sl-f-title').hidden   = t !== 'title';
+  row.querySelector('.sl-f-content').hidden = t !== 'content';
+  row.querySelector('.sl-f-code').hidden    = t !== 'code';
+  row.querySelector('.sl-f-twocol').hidden  = t !== 'two-column';
+}
+
+function collectPresentation() {
+  const slides = [];
+  qAll('#slides-list .slide-row').forEach(row => {
+    const t = row.querySelector('.sl-type').value;
+    const sl = { type:t, title: row.querySelector('.sl-title').value.trim() };
+    if (t==='title')      { sl.subtitle = row.querySelector('.sl-subtitle').value.trim(); }
+    if (t==='content')    { sl.content  = row.querySelector('.sl-content').value.trim();
+                            sl.bullets  = row.querySelector('.sl-bullets').value.split('\n').map(b=>b.trim()).filter(Boolean); }
+    if (t==='code')       { sl.language = row.querySelector('.sl-lang').value.trim();
+                            sl.code     = row.querySelector('.sl-code').value; }
+    if (t==='two-column') { sl.left  = row.querySelector('.sl-left').value.trim();
+                            sl.right = row.querySelector('.sl-right').value.trim(); }
+    slides.push(sl);
+  });
+  return { type:'presentation', title:$('f-title').value.trim(),
+           author:$('f-author').value.trim(), theme:$('f-theme').value, slides };
+}
+
+// ===================== INFOGRAPHIC FORM =====================
+function statHTML(s = {}) {
+  return `<div class="dyn-row">
+    <input class="inp st-icon"  type="text"   placeholder="📊"    style="width:60px;flex-shrink:0" value="${eA(s.icon||'')}">
+    <input class="inp st-value" type="text"   placeholder="42%"   style="width:90px;flex-shrink:0" value="${eA(s.value||'')}">
+    <input class="inp st-label" type="text"   placeholder="Opis"  style="flex:1" value="${eA(s.label||'')}">
+    <button type="button" class="icon-btn" onclick="this.closest('.dyn-row').remove()">✕</button>
+  </div>`;
+}
+
+function chartRowHTML(r = {}) {
+  return `<div class="chart-row">
+    <input class="inp ch-label" type="text"   placeholder="Etykieta" value="${eA(r.label||'')}">
+    <input class="inp ch-value" type="number" placeholder="0"        value="${eA(String(r.value??''))}">
+    <input class="inp ch-color" type="color"  value="${eA(r.color||'#3776ab')}" style="height:36px;cursor:pointer">
+    <button type="button" class="icon-btn" onclick="this.closest('.chart-row').remove()">✕</button>
+  </div>`;
+}
+
+function infoSectionHTML(s = {}) {
+  return `<div class="slide-row">
+    <input class="inp isec-title" type="text" placeholder="Tytuł sekcji" value="${eA(s.title||'')}">
+    <textarea class="inp isec-items" placeholder="Elementy — każdy w nowej linii" rows="3">${eH((s.items||[]).join('\n'))}</textarea>
+    <button type="button" class="btn-sm btn-danger" onclick="this.closest('.slide-row').remove()">✕ Usuń</button>
+  </div>`;
+}
+
+function addStat()        { $('stats-list').insertAdjacentHTML('beforeend', statHTML()); }
+function addChartRow()    { $('chart-data-list').insertAdjacentHTML('beforeend', chartRowHTML()); }
+function addInfoSection() { $('info-sections-list').insertAdjacentHTML('beforeend', infoSectionHTML()); }
+
+function collectInfographic() {
+  const stats = [], chartData = [], sections = [];
+  qAll('#stats-list .dyn-row').forEach(r => stats.push({
+    icon: r.querySelector('.st-icon').value, value: r.querySelector('.st-value').value,
+    label: r.querySelector('.st-label').value,
+  }));
+  qAll('#chart-data-list .chart-row').forEach(r => chartData.push({
+    label: r.querySelector('.ch-label').value,
+    value: parseFloat(r.querySelector('.ch-value').value)||0,
+    color: r.querySelector('.ch-color').value,
+  }));
+  qAll('#info-sections-list .slide-row').forEach(r => sections.push({
+    title: r.querySelector('.isec-title').value.trim(),
+    items: r.querySelector('.isec-items').value.split('\n').map(i=>i.trim()).filter(Boolean),
+  }));
+  return { type:'infographic', title:$('f-title').value.trim(),
+    subtitle:$('f-subtitle').value.trim(), accent:$('f-accent').value,
+    stats, chart:{ type:$('f-chart-type').value, title:$('f-chart-title').value.trim(), data:chartData },
+    sections };
+}
+
+// ===================== CHEATSHEET FORM =====================
+function commandHTML(c = {}) {
+  return `<div class="cmd-row">
+    <input class="inp cmd-cmd"  type="text" placeholder="komenda"             value="${eA(c.cmd||'')}">
+    <input class="inp cmd-desc" type="text" placeholder="Opis"                value="${eA(c.desc||'')}">
+    <input class="inp cmd-ex"   type="text" placeholder="Przykład"            value="${eA(c.example||'')}">
+    <input class="inp cmd-tip"  type="text" placeholder="Wskazówka (opcjon.)" value="${eA(c.tip||'')}">
+    <button type="button" class="icon-btn" onclick="this.closest('.cmd-row').remove()">✕</button>
+  </div>`;
+}
+
+function categoryHTML(cat = {}) {
+  return `<div class="cat-row">
+    <div class="cat-hdr">
+      <input class="inp cat-icon" type="text" placeholder="📦" style="width:54px" value="${eA(cat.icon||'')}">
+      <input class="inp cat-name" type="text" placeholder="Nazwa kategorii" style="flex:1" value="${eA(cat.name||'')}">
+      <button type="button" class="btn-sm btn-danger" onclick="this.closest('.cat-row').remove()">✕ Usuń</button>
+    </div>
+    <div style="font-size:12px;color:var(--muted);display:grid;grid-template-columns:1fr 2fr 1fr 1fr auto;gap:6px;padding:2px 4px;margin-top:4px">
+      <span>Komenda</span><span>Opis</span><span>Przykład</span><span>Wskazówka</span><span></span>
+    </div>
+    <div class="cmds-list">${(cat.commands||[]).map(commandHTML).join('')}</div>
+    <button type="button" class="btn-sm" onclick="this.previousElementSibling.insertAdjacentHTML('beforeend',commandHTML())">+ Dodaj komendę</button>
+  </div>`;
+}
+
+function addCategory() { $('cats-list').insertAdjacentHTML('beforeend', categoryHTML()); }
+
+function collectCheatsheet() {
+  const cats = [];
+  qAll('#cats-list .cat-row').forEach(catRow => {
+    const cmds = [];
+    catRow.querySelectorAll('.cmd-row').forEach(r => cmds.push({
+      cmd:     r.querySelector('.cmd-cmd').value.trim(),
+      desc:    r.querySelector('.cmd-desc').value.trim(),
+      example: r.querySelector('.cmd-ex').value.trim(),
+      tip:     r.querySelector('.cmd-tip').value.trim(),
+    }));
+    const name = catRow.querySelector('.cat-name').value.trim();
+    cats.push({ id:name.toLowerCase().replace(/\s+/g,'-'), name,
+                icon:catRow.querySelector('.cat-icon').value.trim(), commands:cmds });
+  });
+  return { type:'cheatsheet', title:$('f-title').value.trim(),
+           subtitle:$('f-cs-subtitle').value.trim(), categories:cats };
+}
+
+// ===================== SAVE =====================
+async function saveDoc() {
+  const t = state.type;
+  let data;
+  if (t==='presentation') data = collectPresentation();
+  else if (t==='infographic') data = collectInfographic();
+  else data = collectCheatsheet();
+
+  if (!data.title) { alert('Podaj tytuł dokumentu.'); $('f-title').focus(); return; }
+
+  try {
+    if (state.editingId) await api.update(state.editingId, data);
+    else await api.create(data);
+    closeModal();
+    await loadDocs();
+  } catch(e) {
+    alert('Błąd zapisu: ' + e.message);
+  }
+}
+
+// ===================== FILTERS =====================
+qAll('.flt-btn').forEach(btn => btn.addEventListener('click', () => {
+  qAll('.flt-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  state.filter = btn.dataset.f;
+  renderDocs();
+}));
+
+// ===================== PPTX EXPORT =====================
+function addPptxSlide(pptx, slide, colors) {
+  const s = pptx.addSlide();
+  s.background = { color: colors.bg };
+  const T = (text, opts) => s.addText(text, { color: colors.text, ...opts });
+
+  if (slide.type === 'title') {
+    T(slide.title || '', { x: 1, y: 2.2, w: 8, h: 1.5, fontSize: 44, bold: true, align: 'center' });
+    if (slide.subtitle) T(slide.subtitle, { x: 1, y: 3.9, w: 8, h: 0.9, fontSize: 24, align: 'center', color: colors.accent });
+
+  } else if (slide.type === 'content') {
+    T(slide.title || '', { x: 0.4, y: 0.3, w: 9.2, h: 0.9, fontSize: 28, bold: true });
+    const lines = [];
+    if (slide.content) lines.push({ text: slide.content + '\n', options: { fontSize: 16 } });
+    (slide.bullets || []).forEach(b => lines.push({ text: '• ' + b + '\n', options: { fontSize: 16 } }));
+    if (lines.length) s.addText(lines, { x: 0.4, y: 1.4, w: 9.2, h: 5.6, color: colors.text, valign: 'top' });
+
+  } else if (slide.type === 'code') {
+    T(slide.title || '', { x: 0.4, y: 0.3, w: 9.2, h: 0.9, fontSize: 28, bold: true });
+    T(slide.code || '', { x: 0.4, y: 1.4, w: 9.2, h: 5.6, fontSize: 13,
+      fontFace: 'Courier New', fill: { color: colors.codeBg }, valign: 'top', wrap: true });
+
+  } else if (slide.type === 'two-column') {
+    T(slide.title || '', { x: 0.4, y: 0.3, w: 9.2, h: 0.9, fontSize: 28, bold: true });
+    T(slide.left  || '', { x: 0.4, y: 1.4, w: 4.4, h: 5.6, fontSize: 15, valign: 'top', wrap: true });
+    T(slide.right || '', { x: 5.2, y: 1.4, w: 4.4, h: 5.6, fontSize: 15, valign: 'top', wrap: true });
+  } else {
+    T(slide.title || String(slide.type), { x: 0.4, y: 3, w: 9.2, h: 1.2, fontSize: 28, bold: true, align: 'center' });
+  }
+}
+
+async function exportPptx(id) {
+  if (typeof PptxGenJS === 'undefined') {
+    alert('Błąd eksportu PPTX: biblioteka PptxGenJS niedostępna (sprawdź połączenie z CDN).');
+    return;
+  }
+  let data;
+  try {
+    data = await api.get(id);
+  } catch(e) {
+    alert('Błąd eksportu PPTX: ' + e.message);
+    return;
+  }
+  try {
+    const dark = (data.theme || 'dark') === 'dark';
+    const colors = dark
+      ? { bg: '1a1a2e', text: 'e8e8e8', accent: '4f8ef7', codeBg: '0d1117' }
+      : { bg: 'ffffff', text: '1f1e1c', accent: 'c96442', codeBg: 'f4f4f4' };
+
+    const pptx = new PptxGenJS();
+    pptx.layout = 'LAYOUT_WIDE';
+    (data.slides || []).forEach(slide => addPptxSlide(pptx, slide, colors));
+
+    const fileName = (data.title || 'prezentacja').replace(/[<>:"/\\|?*]/g, '_');
+    await pptx.writeFile({ fileName: fileName + '.pptx' });
+  } catch(e) {
+    alert('Błąd eksportu PPTX: ' + e.message);
+  }
+}
+
+// ===================== MAKE commandHTML GLOBAL =====================
+window.commandHTML = commandHTML;
+
+// ===================== INIT =====================
+loadDocs();
+</script>
+</body>
+</html>
