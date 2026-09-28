@@ -11,7 +11,7 @@ env/
 documents/
 
 # Build output (generowany przez build.py)
-cheatsheet.html
+/cheatsheet.html
 
 # Export output (generowany przez aplikację)
 *.pptx
