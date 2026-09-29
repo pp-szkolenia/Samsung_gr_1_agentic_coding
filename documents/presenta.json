@@ -1,0 +1,64 @@
+{
+  "type": "presentation",
+  "title": "Wprowadzenie do Pythona",
+  "author": "Coderslab",
+  "theme": "dark",
+  "slides": [
+    {
+      "type": "title",
+      "title": "Wprowadzenie do Pythona",
+      "subtitle": "Podstawy języka programowania"
+    },
+    {
+      "type": "content",
+      "title": "Dlaczego Python?",
+      "bullets": [
+        "Prosta i czytelna składnia — kod jak pseudokod",
+        "Ogromny ekosystem bibliotek (PyPI: 500k+ pakietów)",
+        "Wszechstronność: web, data science, AI, automatyzacja",
+        "Interpretowany — błyskawiczne prototypowanie",
+        "Wieloparadygmatowy: OOP, funkcyjny, proceduralny"
+      ]
+    },
+    {
+      "type": "code",
+      "title": "Twój pierwszy program w Pythonie",
+      "content": "Tradycyjny program \"Hello, World!\" — i coś więcej:",
+      "language": "python",
+      "code": "# Witaj, świecie!\nprint(\"Hello, World!\")\n\n# f-stringi — wygodne formatowanie\nnazwa = \"Samsung\"\nprint(f\"Witaj, {nazwa}!\")\n\n# Pętle są proste i czytelne\nfor i in range(5):\n    print(f\"Liczba: {i}\")"
+    },
+    {
+      "type": "content",
+      "title": "Podstawowe typy danych",
+      "bullets": [
+        "int / float — liczby całkowite i zmiennoprzecinkowe",
+        "str — napisy (łańcuchy znaków)",
+        "bool — wartości logiczne (True / False)",
+        "list — listy mutowalne: [1, 2, 3]",
+        "tuple — krotki niemutowalne: (1, 2, 3)",
+        "dict — słowniki (mapy klucz-wartość): {'klucz': 'wartość'}",
+        "set — zbiory unikalnych elementów: {1, 2, 3}"
+      ]
+    },
+    {
+      "type": "two-column",
+      "title": "Python a inne języki",
+      "left": "Python ✅\n• Czytelna składnia\n• Dynamiczne typowanie\n• Zarządzanie pamięcią (GC)\n• Szybkie prototypowanie\n• Popularny w nauce i AI",
+      "right": "Java / C++ 🏭\n• Statyczne typowanie\n• Kompilowany (szybszy)\n• Więcej kodu boilerplate\n• Lepsza wydajność\n• Popularny w enterprise"
+    },
+    {
+      "type": "content",
+      "title": "Następne kroki",
+      "bullets": [
+        "Zainstaluj Python z python.org (lub sprawdź python3 --version)",
+        "Wypróbuj REPL: wpisz python3 w terminalu",
+        "Naucz się podstaw: zmienne, pętle, funkcje, klasy",
+        "Poznaj standardową bibliotekę (os, sys, json, re…)",
+        "Wybierz specjalizację: web (Django/Flask), AI (PyTorch), data (pandas)"
+      ]
+    }
+  ],
+  "_id": "presenta",
+  "_created": "2026-09-28T12:47:00",
+  "_updated": "2026-09-28T12:47:00"
+}

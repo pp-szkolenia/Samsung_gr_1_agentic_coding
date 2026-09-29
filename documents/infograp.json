@@ -1,0 +1,90 @@
+{
+  "type": "infographic",
+  "title": "Python w 2024",
+  "subtitle": "Popularność, zastosowania i ekosystem",
+  "accent": "#3776ab",
+  "stats": [
+    {
+      "icon": "🥇",
+      "value": "#1",
+      "label": "Popularny język (TIOBE 2024)"
+    },
+    {
+      "icon": "👥",
+      "value": "8.2M",
+      "label": "Deweloperów na świecie"
+    },
+    {
+      "icon": "📦",
+      "value": "500k+",
+      "label": "Pakietów na PyPI"
+    },
+    {
+      "icon": "⭐",
+      "value": "63k",
+      "label": "GitHub Stars (CPython)"
+    }
+  ],
+  "chart": {
+    "type": "bar",
+    "title": "Zastosowania Pythona wśród deweloperów (%)",
+    "data": [
+      {
+        "label": "Data Science",
+        "value": 58,
+        "color": "#3776ab"
+      },
+      {
+        "label": "Web Backend",
+        "value": 51,
+        "color": "#4ECDC4"
+      },
+      {
+        "label": "ML / AI",
+        "value": 45,
+        "color": "#FF6B6B"
+      },
+      {
+        "label": "Automatyzacja",
+        "value": 43,
+        "color": "#96CEB4"
+      },
+      {
+        "label": "DevOps / CI",
+        "value": 29,
+        "color": "#FFEAA7"
+      },
+      {
+        "label": "Desktop GUI",
+        "value": 14,
+        "color": "#DDA0DD"
+      }
+    ]
+  },
+  "sections": [
+    {
+      "title": "🔥 Najpopularniejsze biblioteki",
+      "items": [
+        "NumPy — obliczenia numeryczne",
+        "pandas — analiza i przetwarzanie danych",
+        "Django / Flask / FastAPI — web frameworki",
+        "TensorFlow / PyTorch — deep learning",
+        "requests — klient HTTP",
+        "Matplotlib / seaborn — wizualizacja"
+      ]
+    },
+    {
+      "title": "🏢 Gdzie Python jest używany?",
+      "items": [
+        "Google — infrastruktura i narzędzia wewnętrzne",
+        "Instagram / Pinterest — backend (Django)",
+        "Spotify — rekomendacje muzyczne",
+        "Netflix — analityka i personalizacja",
+        "NASA — analiza danych z misji kosmicznych"
+      ]
+    }
+  ],
+  "_id": "infograp",
+  "_created": "2026-09-28T12:47:00",
+  "_updated": "2026-09-28T12:47:00"
+}

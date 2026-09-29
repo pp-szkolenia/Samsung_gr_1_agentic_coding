@@ -1,0 +1,196 @@
+{
+  "type": "cheatsheet",
+  "title": "Claude Code — Cheatsheet",
+  "subtitle": "Najważniejsze komendy, flagi i skróty klawiszowe",
+  "categories": [
+    {
+      "id": "sesja-i-kontekst",
+      "name": "Sesja i kontekst",
+      "icon": "💬",
+      "commands": [
+        {
+          "cmd": "/clear",
+          "desc": "test Czyści historię rozmowy i zaczyna od zera. Warto użyć przy zmianie tematu.",
+          "example": "/clear",
+          "tip": "Tańsze i czystsze niż ciągnięcie długiej rozmowy."
+        },
+        {
+          "cmd": "/compact",
+          "desc": "Streszcza dotychczasową rozmowę, żeby zwolnić miejsce w oknie kontekstu.",
+          "example": "/compact skup się na zmianach w API",
+          "tip": ""
+        },
+        {
+          "cmd": "/resume",
+          "desc": "Wyświetla listę poprzednich sesji i pozwala wrócić do jednej z nich.",
+          "example": "/resume",
+          "tip": ""
+        },
+        {
+          "cmd": "/rewind",
+          "desc": "Cofa rozmowę i/lub zmiany w kodzie do wcześniejszego punktu.",
+          "example": "/rewind",
+          "tip": "Skrót: dwa razy Esc."
+        },
+        {
+          "cmd": "/export",
+          "desc": "Eksportuje bieżącą rozmowę do pliku albo do schowka.",
+          "example": "/export rozmowa.md",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "model-i-koszty",
+      "name": "Model i koszty",
+      "icon": "🧠",
+      "commands": [
+        {
+          "cmd": "/model",
+          "desc": "Wybór lub zmiana modelu (np. Opus, Sonnet, Haiku) w trakcie sesji.",
+          "example": "/model sonnet",
+          "tip": "Do prostych zadań lżejszy model jest szybszy i tańszy."
+        },
+        {
+          "cmd": "/fast",
+          "desc": "Włącza lub wyłącza tryb szybki (szybsze generowanie odpowiedzi).",
+          "example": "/fast",
+          "tip": ""
+        },
+        {
+          "cmd": "/usage",
+          "desc": "Pokazuje wykorzystanie limitów planu (sesyjnego i tygodniowego).",
+          "example": "/usage",
+          "tip": ""
+        },
+        {
+          "cmd": "/cost",
+          "desc": "Pokazuje koszt i zużycie tokenów w bieżącej sesji.",
+          "example": "/cost",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "projekt-i-pamięć",
+      "name": "Projekt i pamięć",
+      "icon": "📁",
+      "commands": [
+        {
+          "cmd": "/init",
+          "desc": "Analizuje repozytorium i tworzy plik CLAUDE.md z opisem projektu.",
+          "example": "/init",
+          "tip": "Warto zrobić to na początku pracy z nowym projektem."
+        },
+        {
+          "cmd": "/memory",
+          "desc": "Otwiera pliki pamięci (CLAUDE.md) do edycji.",
+          "example": "/memory",
+          "tip": ""
+        },
+        {
+          "cmd": "/add-dir",
+          "desc": "Dodaje kolejny katalog roboczy, do którego Claude ma dostęp.",
+          "example": "/add-dir ../shared-lib",
+          "tip": ""
+        },
+        {
+          "cmd": "@plik",
+          "desc": "Dołącza wskazany plik lub katalog do wiadomości jako kontekst.",
+          "example": "Wyjaśnij @src/app.ts",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "konfiguracja",
+      "name": "Konfiguracja",
+      "icon": "⚙️",
+      "commands": [
+        {
+          "cmd": "/config",
+          "desc": "Otwiera panel ustawień (motyw, model domyślny, powiadomienia itd.).",
+          "example": "/config",
+          "tip": ""
+        },
+        {
+          "cmd": "/permissions",
+          "desc": "Zarządzanie regułami uprawnień.",
+          "example": "/permissions",
+          "tip": ""
+        },
+        {
+          "cmd": "/hooks",
+          "desc": "Konfiguracja hooków — poleceń uruchamianych automatycznie przy zdarzeniach.",
+          "example": "/hooks",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "praca-z-kodem",
+      "name": "Praca z kodem",
+      "icon": "🔍",
+      "commands": [
+        {
+          "cmd": "/review",
+          "desc": "Prosi o code review zmian lub pull requesta.",
+          "example": "/review",
+          "tip": ""
+        },
+        {
+          "cmd": "/security-review",
+          "desc": "Przegląd bezpieczeństwa zmian na bieżącej gałęzi.",
+          "example": "/security-review",
+          "tip": ""
+        },
+        {
+          "cmd": "!polecenie",
+          "desc": "Tryb bash: uruchamia polecenie powłoki bezpośrednio.",
+          "example": "! npm test",
+          "tip": ""
+        }
+      ]
+    },
+    {
+      "id": "skróty-klawiszowe",
+      "name": "Skróty klawiszowe",
+      "icon": "🎹",
+      "commands": [
+        {
+          "cmd": "Esc",
+          "desc": "Przerywa Claude w trakcie pracy, bez utraty kontekstu.",
+          "example": "Esc",
+          "tip": ""
+        },
+        {
+          "cmd": "Esc Esc",
+          "desc": "Cofa się do wcześniejszej wiadomości (to samo co /rewind).",
+          "example": "Esc Esc",
+          "tip": ""
+        },
+        {
+          "cmd": "Shift+Tab",
+          "desc": "Przełącza tryby uprawnień: domyślny → auto-akceptacja → planowanie.",
+          "example": "Shift+Tab",
+          "tip": ""
+        },
+        {
+          "cmd": "Ctrl+C",
+          "desc": "Anuluje bieżące wejście; wciśnięte dwa razy zamyka Claude Code.",
+          "example": "Ctrl+C",
+          "tip": ""
+        },
+        {
+          "cmd": "↑ / ↓",
+          "desc": "Przewija historię wcześniej wpisanych poleceń.",
+          "example": "↑",
+          "tip": ""
+        }
+      ]
+    }
+  ],
+  "_id": "cheatshe",
+  "_created": "2026-09-28T12:47:00",
+  "_updated": "2026-09-28T12:55:09"
+}

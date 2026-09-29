@@ -7,16 +7,12 @@ __pycache__/
 venv/
 env/
 
-# Dokumenty użytkownika (generowane przez aplikację w runtime)
-documents/
 
 # Build output (generowany przez build.py)
 /cheatsheet.html
 
 # Export output (generowany przez aplikację)
 *.pptx
-*.pdf
-
 # Artefakty testów
 test-screenshots/
 
