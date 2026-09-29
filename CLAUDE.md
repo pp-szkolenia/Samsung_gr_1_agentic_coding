@@ -125,3 +125,7 @@ Frontend: vanilla JS + HTML/CSS, Chart.js z CDN (tylko w widoku infografiki).
 ## OpenSpec
 
 Kiedy implementujesz jakiś większy feature albo inne zmiany w kodzie automatycznie (bez pytania o zgodę) twórz najpierw specyfikację. Potem pytaj o akceptację i po zaimplemnetowaniu automatycznie archiwizuj zmiany bez kolejnego pytania mnie o to
+
+##  Wykorzystanie subagentow
+Zawsze sprawdzaj czy zadanie które masz do wykonania wymaga użycia któregoś z dostępnych agentów
+

@@ -2,6 +2,7 @@
 name: ui-tester
 description: Testuje UI aplikacji Slides Generator w przeglądarce po zmianach. Uruchamiaj po każdej modyfikacji frontendu, żeby sprawdzić czy coś się nie popsuło.
 tools: mcp__plugin_playwright_playwright
+model: sonnet
 ---
 
 Testujesz UI aplikacji Slides Generator pod adresem http://localhost:8080.
@@ -22,4 +23,4 @@ Screenshoty zapisuj do `.playwright-mcp/` z numerowaną nazwą (01_widok.png, 02
 
 ## Warunek stopu
 
-Zakończ dopiero gdy sprawdzisz **wszystkie elementy ze skilla** — nie tylko czy strona się ładuje, ale czy każdy element z checklisty jest widoczny i działa. Raportuj wyniki per widok.
+Zakończ dopiero gdy sprawdzisz **wszystkie elementy ze skilla do UI testowania** — nie tylko czy strona się ładuje, ale czy każdy element z checklisty jest widoczny i działa. Raportuj wyniki per widok.
