@@ -31,3 +31,7 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Sekrety (klucze API)
+/env
+/test
