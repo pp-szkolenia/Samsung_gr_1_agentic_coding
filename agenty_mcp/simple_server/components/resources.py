@@ -13,3 +13,13 @@ DATA_DIR = Path(__file__).parent.parent / "data"
 )
 def numbers_data():
     return (DATA_DIR / "numbers.json").read_text(encoding="utf-8")
+
+
+@resource(
+    "data://strings",
+    name="Text data",
+    description="Pairs of texts (a, b) used as input data",
+    mime_type="application/json",
+)
+def strings_data() -> str:
+    return (DATA_DIR / "strings.json").read_text(encoding="utf-8")

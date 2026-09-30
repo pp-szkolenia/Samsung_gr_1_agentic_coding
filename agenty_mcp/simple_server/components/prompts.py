@@ -22,3 +22,14 @@ def operation_a_on_nth_numbers_pair(
     langfuse_prompt = langfuse.get_prompt("operation-a-prompt")
     # return [Message("test")]
     return [Message(langfuse_prompt.compile(index=index))]
+
+
+@prompt(
+    name="concatenate-nth-texts-pair",
+    description="Explains how to concatenate the n-th pair of texts from the text data",
+)
+def concatenate_nth_texts_pair(
+    index: Annotated[int, Field(description="Index of the texts pair in the text data")],
+) -> list[Message]:
+    langfuse_prompt = langfuse.get_prompt("concatenate-nth-texts-pair", label="production")
+    return [Message(langfuse_prompt.compile(index=index))]

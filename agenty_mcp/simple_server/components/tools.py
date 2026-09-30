@@ -9,3 +9,11 @@ def operation_a(
     b: Annotated[float, Field(description="The second number")]
 ):
     return 2*a + 3*b
+
+
+@tool(description="Concatenate two texts (a first, then b) and return the result")
+def concatenate(
+    a: Annotated[str, Field(description="The first text")],
+    b: Annotated[str, Field(description="The second text")],
+) -> str:
+    return f"{a}:{b}"
