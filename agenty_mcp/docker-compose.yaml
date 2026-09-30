@@ -1,0 +1,9 @@
+services:
+  simple-server:
+    build:
+      context: .
+      dockerfile: simple_server/Dockerfile
+    env_file: .env
+    network_mode: host
+    volumes:
+      - ./simple_server:/app/simple_server
