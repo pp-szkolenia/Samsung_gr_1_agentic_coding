@@ -12,6 +12,10 @@ langfuse = Langfuse(
 )
 
 
+@prompt(
+    name="operation-a-on-nth-numbers-pair",
+    description="Explains how to perform operation A on the n-th pair of numbers"
+)
 def operation_a_on_nth_numbers_pair(
     index: Annotated[int, Field(description="Index of the numbers pair in the numerical data")]
 ):
