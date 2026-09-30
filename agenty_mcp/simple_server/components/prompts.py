@@ -18,7 +18,7 @@ langfuse = Langfuse(
 )
 def operation_a_on_nth_numbers_pair(
     index: Annotated[int, Field(description="Index of the numbers pair in the numerical data")]
-) -> list[Message]:
+):
     langfuse_prompt = langfuse.get_prompt("operation-a-prompt")
     # return [Message("test")]
     return [Message(langfuse_prompt.compile(index=index))]
