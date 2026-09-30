@@ -1,6 +1,10 @@
 from pathlib import Path
 from fastmcp import FastMCP
 from fastmcp.server.providers import FileSystemProvider
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 
 mcp = FastMCP(
