@@ -16,4 +16,4 @@ def concatenate(
     a: Annotated[str, Field(description="The first text")],
     b: Annotated[str, Field(description="The second text")],
 ) -> str:
-    return f"{a}:{b}"
+    return f"{a}-{b}"
